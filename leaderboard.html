@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+        background-color: #0f1115;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .leaderboard {
+        width: 100%;
+        max-width: 700px;
+        background-color: rgb(23, 25, 35);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(255, 79, 216, 0.15);
+    }
+
+    .leaderboard-header {
+        padding: 20px;
+        text-align: center;
+        border-bottom: 2px solid rgb(255, 79, 216);
+    }
+
+    .leaderboard-header h1 {
+        color: rgb(255, 79, 216);
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: rgb(255, 79, 216);
+        padding: 15px;
+        text-align: left;
+        background-color: rgba(255, 79, 216, 0.05);
+    }
+
+    td {
+        padding: 15px;
+    }
+
+    tr {
+        transition: all 0.2s ease;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    tr:hover {
+        background-color: rgba(255, 79, 216, 0.08);
+    }
+
+    .rank {
+        width: 80px;
+        font-weight: bold;
+        color: rgb(255, 79, 216);
+    }
+
+    .player {
+        font-weight: 500;
+    }
+
+    .score {
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .gold {
+        color: #ffd700;
+    }
+
+    .silver {
+        color: #c0c0c0;
+    }
+
+    .bronze {
+        color: #cd7f32;
+    }
+
+    .btn{
+        width:100%;
+        padding:.8rem;
+        border:none;
+        border-radius:8px;
+        background:var(--accent);
+        color:#0f172a;
+        font-weight:600;
+        cursor:pointer;
+        transition:.2s;
+        background-color: rgb(255, 79, 216);
+    }
+</style>
+<script>
+    async function sendData() {
+    // const data = {  };
+        let html = "";
+
+        const response = await fetch('https://localhost:7229/Leaderboard/GetLeaderboardAPI', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                Score: 2000, 
+                Name: "NON"
+            })
+        });
+
+        const leaderboards = await response.json();
+        console.log(leaderboards)
+
+        leaderboards.forEach((leaderboard, index) => {
+        html += `
+            <tr>
+                <td class="rank">${index + 1}</td>
+                <td class="player">${leaderboard.name}</td>
+                <td class="score">${leaderboard.score}</td>
+            </tr>
+        `;
+
+        document.querySelector('#leaderboard tbody').innerHTML = html;
+    });
+    }
+
+    sendData();
+</script>
+</head>
+<body>
+
+<div class="leaderboard">
+
+    <div class="leaderboard-header">
+        <h1>🏆 Leaderboard</h1>
+    </div>
+
+    <table id="leaderboard">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+
+        <tbody class="">
+            
+        </tbody>
+    </table>
+
+    <br>
+
+    <div style="justify-content: center; display: flex;">
+        <button class="btn" id="btn-back">
+            Back
+        </button>  
+
+        <script>
+            document.getElementById("btn-back").onclick = function () {
+                window.location.href = "./index.html";
+            }
+        </script>
+    </div> 
+
+</div>
+</body>
+</html>
